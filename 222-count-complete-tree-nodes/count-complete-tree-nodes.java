@@ -14,17 +14,10 @@
  * }
  */
 class Solution {
-    int count = 0;
     public int countNodes(TreeNode root) {
-        preorder(root);
-        return count;
-    }
-    public void preorder(TreeNode root){
-        if(root == null){
-            return;
+        if(root==null){
+            return 0;
         }
-        preorder(root.left);
-        preorder(root.right);
-        count++;
+        return 1+countNodes(root.left)+countNodes(root.right);
     }
 }
