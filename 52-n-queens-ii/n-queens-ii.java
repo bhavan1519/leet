@@ -1,45 +1,51 @@
 class Solution {
+
+    int count = 0;
     public int totalNQueens(int n) {
-        boolean[][] board = new boolean[n][n];
-        int count = NQueens(board, 0);
+        char[][] queen = new char[n][n];
+        for (int i=0; i<n; i++) {
+            Arrays.fill(queen[i],'.');
+        }
+        solveUntil(queen, 0);
         return count;
     }
-    private int NQueens(boolean[][] board, int row){
-        int n = board.length;
-        if(row == n){
-            return 1;
-        }
-        int count = 0;
-        for(int col = 0; col < n; col++){
-            if(isSafe(board, row, col)){
-                board[row][col] = true; 
-                count += NQueens(board, row + 1); 
-                board[row][col] = false; 
-            }
-        }
 
-        return count;
-    }
-    
-    private static boolean isSafe(boolean[][] board, int row, int col) {
-  
-        for (int i = 0; i < row; i++) {
-            if (board[i][col]) {
-                return false;
-            }
-        }
-        for (int i = 1; i <= Math.min(row, col); i++) {
-            if (board[row - i][col - i]) {
+    public boolean isValid(char[][] queen, int row, int col) {
+
+        for (int i=col-1; i>=0; i--) {
+            if (queen[row][i] == 'Q') {
                 return false;
             }
         }
 
-        for (int i = 1; i <= Math.min(row, board.length - 1 - col); i++) {
-            if (board[row - i][col + i]) {
+        for (int i=row-1, j =col-1; i>=0 && j>=0; i--, j--) {
+            if (queen[i][j] == 'Q') {
+                return false;
+            }
+        }
+
+        for (int i=row+1, j=col-1; i<queen.length && j>=0; i++, j--) {
+            if (queen[i][j] == 'Q') {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public void solveUntil(char[][] queen, int col) {
+
+        if (col == queen.length) {
+            count++;
+            return;
+        }
+
+        for (int row=0; row<queen.length; row++) {
+            if (isValid(queen, row, col)) {
+                queen[row][col] = 'Q'; 
+                solveUntil(queen, col + 1);
+                queen[row][col] = '.';
+            }
+        }
     }
 }
