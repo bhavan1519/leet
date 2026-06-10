@@ -1,24 +1,29 @@
 class Solution {
-    public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> res = new ArrayList<>();
 
-        makeCombination(candidates, target, 0, new ArrayList<>(), 0, res);
-        return res;        
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> curr = new ArrayList<>();
+        solve(0, target, candidates, curr, ans);
+        return ans;
     }
 
-    private void makeCombination(int[] candidates, int target, int idx, List<Integer> comb, int total, List<List<Integer>> res) {
-        if (total == target) {
-            res.add(new ArrayList<>(comb));
+    private void solve(int index, int target, int[] arr, List<Integer> curr, List<List<Integer>> ans) {
+
+        if (target == 0) {
+            ans.add(new ArrayList<>(curr));
             return;
         }
 
-        if (total > target || idx >= candidates.length) {
+        if (index == arr.length) {
             return;
         }
 
-        comb.add(candidates[idx]);
-        makeCombination(candidates, target, idx, comb, total + candidates[idx], res);
-        comb.remove(comb.size() - 1);
-        makeCombination(candidates, target, idx + 1, comb, total, res);
+        if (arr[index] <= target) {
+            curr.add(arr[index]);
+            solve(index, target - arr[index], arr, curr, ans);
+            curr.remove(curr.size() - 1);
+        }
+        solve(index + 1, target, arr, curr, ans);
     }
 }
